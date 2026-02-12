@@ -4,7 +4,7 @@ import { AuthContext } from "../context/AuthContext";
 import { ChatContext } from "../context/ChatContext";
 import toast from "react-hot-toast";
 import axios from "axios";
-import UserSearch from "../components/userSearch";
+import UserSearch from "../components/UserSearch";
 
 const ProfilePage = () => {
   const { authUser, updateProfile, token } = useContext(AuthContext);
