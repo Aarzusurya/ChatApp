@@ -8,7 +8,7 @@ const userSchema = new mongoose.Schema(
     profilePic: { type: String, default: "" },
     bio: { type: String },
 
-    // 🔐 OTP fields
+    
     resetOTP: String,
     resetOTPExpiry: Date,
   },
