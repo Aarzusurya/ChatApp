@@ -217,19 +217,23 @@ export const forgotPassword = async (req, res) => {
       const errorBody = await emailResponse.json().catch(() => ({}));
       const providerMessage = errorBody.message || "Unknown Resend error";
       const normalizedMessage = providerMessage.toLowerCase();
+      const safeProviderMessage = providerMessage
+        .replace(/\b[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}\b/gi, "[email]")
+        .replace(/\bre_[A-Za-z0-9_-]+\b/g, "[redacted]");
       console.error("Resend email API error:", {
         status: emailResponse.status,
         name: errorBody.name,
-        message: providerMessage,
+        message: safeProviderMessage,
       });
 
-      let message = "Resend rejected the email. Check the backend logs for details.";
+      let message = `Resend rejected the email (${errorBody.name || emailResponse.status}): ${safeProviderMessage}`;
       if (emailResponse.status === 401) {
         message = "Resend rejected the API key. Check RESEND_API_KEY in Render.";
       } else if (
         normalizedMessage.includes("testing emails") ||
         normalizedMessage.includes("only send") ||
-        normalizedMessage.includes("own email")
+        normalizedMessage.includes("own email") ||
+        normalizedMessage.includes("only the account owner")
       ) {
         message = "Resend's test sender can only send to your Resend account email. Verify a domain and set EMAIL_FROM to send to other users.";
       } else if (
