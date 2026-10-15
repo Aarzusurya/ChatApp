@@ -86,8 +86,8 @@ const ProfilePage = () => {
   };
 
   return (
-    <div className="min-h-screen bg-cover bg-no-repeat flex items-center justify-center">
-      <div className="w-5/6 max-w-4xl backdrop-blur-2xl text-gray-300 border-2 border-gray-600 flex items-start justify-between max-sm:flex-col-reverse rounded-lg p-5 gap-5">
+    <div className="flex min-h-dvh items-center justify-center bg-cover bg-no-repeat px-4 py-6">
+      <div className="flex w-full max-w-4xl flex-col-reverse items-stretch justify-between gap-5 rounded-lg border-2 border-gray-600 p-4 text-gray-300 backdrop-blur-2xl sm:p-5 md:flex-row md:items-start">
         {/* ================= Profile Form ================= */}
         <form onSubmit={handleSubmit} className="flex flex-col gap-5 flex-1">
           <h3 className="text-lg">Profile details</h3>
@@ -136,11 +136,11 @@ const ProfilePage = () => {
         </form>
 
         {/* ================= Right Side ================= */}
-        <div className="flex flex-col gap-5 w-80">
+        <div className="flex w-full flex-col gap-5 md:w-64 lg:w-80">
           <img
             src={authUser.profilePic || assets.avatar_icon}
             alt="profile"
-            className="w-full aspect-square rounded-full object-cover"
+            className="mx-auto aspect-square w-36 rounded-full object-cover md:w-full"
           />
 
           <h3 className="text-lg">Start a Chat</h3>

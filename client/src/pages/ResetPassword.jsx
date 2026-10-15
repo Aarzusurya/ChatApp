@@ -65,8 +65,8 @@ const ResetPassword = () => {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-black">
-      <div className="w-full max-w-md bg-[#0f0f1a] text-white p-8 rounded-2xl">
+    <div className="flex min-h-dvh items-center justify-center bg-black px-4 py-6">
+      <div className="w-full max-w-md rounded-2xl bg-[#0f0f1a] p-5 text-white sm:p-8">
         <h2 className="text-2xl font-bold text-center mb-6">
           Reset Password 🔑
         </h2>
@@ -80,7 +80,7 @@ const ResetPassword = () => {
             onChange={(e) =>
               setOtp(e.target.value.replace(/\D/g, ""))
             }
-            className="w-full px-4 py-3 rounded-lg bg-[#1b1b2e]"
+            className="w-full rounded-lg border border-white/30 bg-[#111827] px-4 py-3 text-white placeholder:text-white/60 focus:border-violet-400 focus:outline-none focus:ring-2 focus:ring-violet-400/30"
           />
 
           <input
@@ -89,7 +89,7 @@ const ResetPassword = () => {
             autoComplete="new-password"
             value={newPassword}
             onChange={(e) => setNewPassword(e.target.value)}
-            className="w-full px-4 py-3 rounded-lg bg-[#1b1b2e]"
+            className="w-full rounded-lg border border-white/30 bg-[#111827] px-4 py-3 text-white placeholder:text-white/60 focus:border-violet-400 focus:outline-none focus:ring-2 focus:ring-violet-400/30"
           />
 
           <input
@@ -98,7 +98,7 @@ const ResetPassword = () => {
             autoComplete="new-password"
             value={confirmPassword}
             onChange={(e) => setConfirmPassword(e.target.value)}
-            className="w-full px-4 py-3 rounded-lg bg-[#1b1b2e]"
+            className="w-full rounded-lg border border-white/30 bg-[#111827] px-4 py-3 text-white placeholder:text-white/60 focus:border-violet-400 focus:outline-none focus:ring-2 focus:ring-violet-400/30"
           />
 
           <button

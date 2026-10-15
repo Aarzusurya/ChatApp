@@ -13,7 +13,7 @@ const RightSidebar = ({ selectedUser }) => {
   const mediaMessages = messages.filter((msg) => msg.image);
 
   return (
-    <div className="bg-[#8185B2]/10 text-white w-full h-full relative overflow-y-auto max-md:hidden">
+    <div className="relative h-full w-full overflow-y-auto bg-[#8185B2]/10 text-white">
       {/* USER INFO */}
       <div className="pt-16 flex flex-col items-center gap-2 text-xs font-light">
         <img

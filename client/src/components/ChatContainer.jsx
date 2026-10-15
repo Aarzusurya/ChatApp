@@ -60,7 +60,7 @@ const ChatContainer = () => {
   // 💤 EMPTY STATE
   if (!selectedUser) {
     return (
-      <div className="flex flex-col items-center justify-center gap-2 text-gray-400 bg-white/10 max-md:hidden">
+      <div className="flex flex-col items-center justify-center gap-2 bg-white/10 text-gray-400 max-md:hidden">
         <img src={assets.logo_icon} className="max-w-16" />
         <p className="text-lg font-medium text-white">
           Select a chat to start messaging
@@ -70,9 +70,9 @@ const ChatContainer = () => {
   }
 
   return (
-    <div className="h-full overflow-hidden relative backdrop-blur-lg">
+    <div className="relative flex h-full min-h-0 min-w-0 flex-col overflow-hidden backdrop-blur-lg">
       {/* HEADER */}
-      <div className="flex items-center gap-3 py-3 px-4 border-b border-stone-500">
+      <div className="flex shrink-0 items-center gap-3 border-b border-stone-500 px-3 py-3 sm:px-4">
         <img
           src={selectedUser.profilePic || assets.avatar_icon}
           className="w-9 h-9 rounded-full"
@@ -95,7 +95,7 @@ const ChatContainer = () => {
       </div>
 
       {/* CHAT AREA */}
-      <div className="flex flex-col h-[calc(100%-120px)] overflow-y-auto p-4 space-y-3">
+      <div className="flex min-h-0 flex-1 flex-col space-y-3 overflow-y-auto p-3 sm:p-4">
         {messages.length === 0 && (
           <p className="text-center text-sm text-white/60 mt-10">
             No messages yet. Say hi 👋
@@ -166,14 +166,14 @@ const ChatContainer = () => {
       {/* INPUT */}
       <form
         onSubmit={handleSendMessage}
-        className="absolute bottom-0 left-0 right-0 flex gap-3 p-3 bg-black/20"
+        className="flex shrink-0 gap-2 bg-black/20 p-2 sm:gap-3 sm:p-3"
       >
         <div className="flex-1 flex items-center bg-gray-100/10 px-4 rounded-full">
           <input
             value={input}
             onChange={(e) => setInput(e.target.value)}
             placeholder="Send a message"
-            className="flex-1 text-sm py-3 bg-transparent outline-none text-white placeholder-gray-400"
+            className="min-w-0 flex-1 bg-transparent py-3 text-sm text-white outline-none placeholder-gray-400"
           />
 
           <input

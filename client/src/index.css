@@ -5,6 +5,15 @@
 
 *{
   font-family: "Outfit", sans-serif;
+  box-sizing: border-box;
+}
+
+html,
+body,
+#root {
+  min-width: 320px;
+  min-height: 100%;
+  margin: 0;
 }
 
 ::-webkit-scrollbar{

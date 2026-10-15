@@ -42,12 +42,12 @@ const LoginPage = () => {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center gap-8 backdrop-blur-2xl">
-      <img src={assets.logo_big} alt="Logo" className="w-[250px]" />
+    <div className="flex min-h-dvh items-center justify-center gap-8 px-4 py-8 backdrop-blur-2xl max-md:flex-col max-md:gap-5">
+      <img src={assets.logo_big} alt="Logo" className="w-40 max-md:w-32" />
 
       <form
         onSubmit={onSubmitHandler}
-        className="border bg-white/10 text-white border-gray-500 p-6 flex flex-col gap-5 rounded-lg"
+        className="flex w-full max-w-md flex-col gap-5 rounded-lg border border-gray-500 bg-white/10 p-5 text-white sm:p-6"
       >
         <h2 className="text-2xl flex justify-between items-center">
           {currState}
@@ -61,6 +61,19 @@ const LoginPage = () => {
           )}
         </h2>
 
+        {currState === "Sign up" && (
+          <button
+            type="button"
+            onClick={() => {
+              setCurrState("Login");
+              setIsDataSubmitted(false);
+            }}
+            className="self-start text-sm text-violet-300 hover:text-violet-200"
+          >
+            ← Back to login
+          </button>
+        )}
+
         {currState === "Sign up" && !isDataSubmitted && (
           <input
             type="text"
@@ -68,7 +81,7 @@ const LoginPage = () => {
             required
             value={fullName}
             onChange={(e) => setFullName(e.target.value)}
-            className="p-2 rounded-md"
+            className="w-full rounded-md border border-white/30 bg-[#111827]/90 p-3 text-white placeholder:text-white/60 focus:border-violet-400 focus:outline-none focus:ring-2 focus:ring-violet-400/30"
           />
         )}
 
@@ -80,7 +93,7 @@ const LoginPage = () => {
               required
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              className="p-2 rounded-md"
+              className="w-full rounded-md border border-white/30 bg-[#111827]/90 p-3 text-white placeholder:text-white/60 focus:border-violet-400 focus:outline-none focus:ring-2 focus:ring-violet-400/30"
             />
 
             <input
@@ -89,7 +102,7 @@ const LoginPage = () => {
               required
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              className="p-2 rounded-md"
+              className="w-full rounded-md border border-white/30 bg-[#111827]/90 p-3 text-white placeholder:text-white/60 focus:border-violet-400 focus:outline-none focus:ring-2 focus:ring-violet-400/30"
             />
           </>
         )}
@@ -101,7 +114,7 @@ const LoginPage = () => {
             required
             value={bio}
             onChange={(e) => setBio(e.target.value)}
-            className="p-2 rounded-md"
+            className="w-full resize-y rounded-md border border-white/30 bg-[#111827]/90 p-3 text-white placeholder:text-white/60 focus:border-violet-400 focus:outline-none focus:ring-2 focus:ring-violet-400/30"
           />
         )}
 

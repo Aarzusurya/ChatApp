@@ -39,8 +39,16 @@ const ForgotPassword = () => {
   };
 
   return (
-    <div className="relative z-50 min-h-screen flex items-center justify-center">
-      <div className="w-full max-w-md bg-[#0f0f1a]/90 text-white p-8 rounded-2xl shadow-2xl">
+    <div className="relative z-50 flex min-h-dvh items-center justify-center px-4 py-6">
+      <div className="w-full max-w-md rounded-2xl bg-[#0f0f1a]/95 p-5 text-white shadow-2xl sm:p-8">
+        <button
+          type="button"
+          onClick={() => navigate("/login")}
+          className="mb-4 text-sm text-violet-300 hover:text-violet-200"
+        >
+          ← Back to login
+        </button>
+
         <h2 className="text-2xl font-bold text-center mb-2">
           Forgot Password 🔐
         </h2>
@@ -53,7 +61,7 @@ const ForgotPassword = () => {
           <input
             type="email"
             placeholder="Enter your email"
-            className="w-full px-4 py-3 rounded-lg bg-[#1b1b2e] border border-gray-600"
+            className="w-full rounded-lg border border-white/30 bg-[#111827] px-4 py-3 text-white placeholder:text-white/60 focus:border-violet-400 focus:outline-none focus:ring-2 focus:ring-violet-400/30"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             required

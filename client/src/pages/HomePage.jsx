@@ -12,22 +12,24 @@ const HomePage = () => {
   }, []);
 
   return (
-    <div className="border w-full h-screen sm:px-[15%] sm:py-[5%]">
+    <div className="box-border h-dvh w-full border sm:px-[4%] sm:py-[3%] lg:px-[10%] lg:py-[4%]">
       <div
-        className={`backdrop-blur-xl border-2 border-gray-600 rounded-2xl overflow-hidden h-full grid relative ${
+        className={`relative grid h-full min-h-0 overflow-hidden border-2 border-gray-600 bg-black/10 backdrop-blur-xl sm:rounded-2xl ${
           selectedUser
-            ? "grid-cols-1 md:grid-cols-[1fr_1.5fr_1fr] xl:grid-cols-[1fr_2fr_1fr]"
+            ? "grid-cols-1 md:grid-cols-[minmax(220px,0.8fr)_minmax(0,1.5fr)] xl:grid-cols-[minmax(220px,0.8fr)_minmax(0,1.5fr)_minmax(220px,0.8fr)]"
             : "grid-cols-1 md:grid-cols-2"
         }`}
       >
         {/* LEFT SIDEBAR */}
-        <Sidebar />
+        <div className={selectedUser ? "max-md:hidden" : ""}>
+          <Sidebar />
+        </div>
 
         {/* CHAT AREA */}
         <ChatContainer />
 
         {/* RIGHT SIDEBAR */}
-        {selectedUser && <RightSidebar selectedUser={selectedUser} />}
+        {selectedUser && <div className="hidden min-h-0 xl:block"><RightSidebar selectedUser={selectedUser} /></div>}
       </div>
     </div>
   );
