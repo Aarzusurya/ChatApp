@@ -49,7 +49,7 @@ const LoginPage = () => {
         onSubmit={onSubmitHandler}
         className="flex w-full max-w-md flex-col gap-5 rounded-lg border border-gray-500 bg-white/10 p-5 text-white sm:p-6"
       >
-        <h2 className="text-2xl flex justify-between items-center">
+        <h2 className="flex items-center justify-between text-2xl font-semibold">
           {currState}
         </h2>
 
@@ -57,23 +57,22 @@ const LoginPage = () => {
           <button
             type="button"
             onClick={() => setIsDataSubmitted(false)}
-            className="self-start rounded-md border border-white/30 px-3 py-2 text-sm text-white transition hover:bg-white/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-violet-400"
+            className="w-fit cursor-pointer rounded-md border border-white/30 px-3 py-2 text-sm text-white transition hover:border-violet-300 hover:bg-violet-500/20 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-violet-400"
           >
             ← Back to details
           </button>
         )}
 
-        {currState === "Sign up" && (
-          <button
-            type="button"
-            onClick={() => {
-              setCurrState("Login");
-              setIsDataSubmitted(false);
-            }}
-            className="self-start text-sm text-violet-300 hover:text-violet-200"
-          >
-            ← Back to login
-          </button>
+        {currState === "Sign up" && !isDataSubmitted && (
+          <p className="-mt-3 text-sm text-gray-200">
+            Create your account to start chatting.
+          </p>
+        )}
+
+        {currState === "Sign up" && isDataSubmitted && (
+          <p className="-mt-3 text-sm text-gray-200">
+            Add a short bio so others can get to know you.
+          </p>
         )}
 
         {currState === "Sign up" && !isDataSubmitted && (
@@ -122,7 +121,7 @@ const LoginPage = () => {
 
         <button
           type="submit"
-          className="rounded-md bg-gradient-to-r from-purple-400 to-violet-600 py-3 text-white transition hover:brightness-110 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white"
+          className="cursor-pointer rounded-md bg-gradient-to-r from-purple-400 to-violet-600 py-3 font-semibold text-white shadow-md shadow-violet-950/30 transition hover:brightness-110 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white"
         >
           {currState === "Sign up" ? "Create Account" : "Login Now"}
         </button>
@@ -133,7 +132,7 @@ const LoginPage = () => {
               Already have an account?{" "}
               <button
                 type="button"
-                className="font-bold text-white underline decoration-violet-300 decoration-2 underline-offset-4 transition hover:text-violet-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-violet-300"
+                className="cursor-pointer rounded font-bold text-white underline decoration-violet-300 decoration-2 underline-offset-4 transition hover:text-violet-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-violet-300"
                 onClick={() => {
                   setCurrState("Login");
                   setIsDataSubmitted(false);
@@ -147,7 +146,7 @@ const LoginPage = () => {
               Create an account{" "}
               <button
                 type="button"
-                className="font-bold text-white underline decoration-violet-300 decoration-2 underline-offset-4 transition hover:text-violet-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-violet-300"
+                className="cursor-pointer rounded font-bold text-white underline decoration-violet-300 decoration-2 underline-offset-4 transition hover:text-violet-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-violet-300"
                 onClick={() => {
                   setCurrState("Sign up");
                   setIsDataSubmitted(false);
@@ -162,7 +161,7 @@ const LoginPage = () => {
         {currState === "Login" && (
           <Link
             to="/forgot-password"
-            className="w-fit rounded-md border border-violet-200/70 bg-violet-950/80 px-3 py-2 text-base font-bold text-white underline decoration-violet-200 decoration-2 underline-offset-4 shadow-sm shadow-black/30 transition hover:bg-violet-900 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white"
+            className="w-fit cursor-pointer rounded-md border border-violet-200/70 bg-violet-950/80 px-3 py-2 text-base font-bold text-white underline decoration-violet-200 decoration-2 underline-offset-4 shadow-sm shadow-black/30 transition hover:bg-violet-900 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white"
           >
             Forgot Password?
           </Link>
