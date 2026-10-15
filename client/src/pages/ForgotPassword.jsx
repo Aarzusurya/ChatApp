@@ -48,7 +48,7 @@ const ForgotPassword = () => {
         <button
           type="button"
           onClick={() => navigate("/login")}
-          className="mb-4 rounded text-sm font-medium text-violet-300 underline decoration-violet-300/60 underline-offset-4 transition hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-violet-400"
+          className="mb-4 cursor-pointer rounded text-sm font-medium text-violet-300 underline decoration-violet-300/60 underline-offset-4 transition hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-violet-400"
         >
           ← Back to login
         </button>
@@ -74,7 +74,7 @@ const ForgotPassword = () => {
           <button
             type="submit"
             disabled={loading}
-            className="w-full rounded-lg bg-blue-600 py-3 font-semibold text-white transition hover:bg-blue-500 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white disabled:cursor-not-allowed disabled:opacity-60"
+            className="w-full cursor-pointer rounded-lg bg-blue-600 py-3 font-semibold text-white transition hover:bg-blue-500 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white disabled:cursor-not-allowed disabled:opacity-60"
           >
             {loading ? "Sending OTP..." : "Send OTP"}
           </button>

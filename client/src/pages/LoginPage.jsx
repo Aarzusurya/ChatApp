@@ -1,10 +1,9 @@
 import { useState, useContext, useEffect } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import assets from "../assets/assets";
 import { AuthContext } from "../context/AuthContext";
 
 const LoginPage = () => {
-  const [currState, setCurrState] = useState("Login");
   const [fullName, setFullName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -13,6 +12,9 @@ const LoginPage = () => {
 
   const { login, authUser } = useContext(AuthContext);
   const navigate = useNavigate();
+  const location = useLocation();
+  const isSignup = location.pathname === "/signup";
+  const currState = isSignup ? "Sign up" : "Login";
 
   // ✅ redirect AFTER login
   useEffect(() => {
@@ -25,18 +27,18 @@ const LoginPage = () => {
     event.preventDefault();
 
     // Step 1: move to bio in signup
-    if (currState === "Sign up" && !isDataSubmitted) {
+    if (isSignup && !isDataSubmitted) {
       setIsDataSubmitted(true);
       return;
     }
 
     const payload =
-      currState === "Sign up"
+      isSignup
         ? { fullName, email, password, bio }
         : { email, password };
 
     await login(
-      currState === "Sign up" ? "signup" : "login",
+      isSignup ? "signup" : "login",
       payload
     );
   };
@@ -63,19 +65,19 @@ const LoginPage = () => {
           </button>
         )}
 
-        {currState === "Sign up" && !isDataSubmitted && (
+        {isSignup && !isDataSubmitted && (
           <p className="-mt-3 text-sm text-gray-200">
             Create your account to start chatting.
           </p>
         )}
 
-        {currState === "Sign up" && isDataSubmitted && (
+        {isSignup && isDataSubmitted && (
           <p className="-mt-3 text-sm text-gray-200">
             Add a short bio so others can get to know you.
           </p>
         )}
 
-        {currState === "Sign up" && !isDataSubmitted && (
+        {isSignup && !isDataSubmitted && (
           <input
             type="text"
             placeholder="Full Name"
@@ -108,7 +110,7 @@ const LoginPage = () => {
           </>
         )}
 
-        {currState === "Sign up" && isDataSubmitted && (
+        {isSignup && isDataSubmitted && (
           <textarea
             rows={4}
             placeholder="Write your bio..."
@@ -123,20 +125,17 @@ const LoginPage = () => {
           type="submit"
           className="cursor-pointer rounded-md bg-gradient-to-r from-purple-400 to-violet-600 py-3 font-semibold text-white shadow-md shadow-violet-950/30 transition hover:brightness-110 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white"
         >
-          {currState === "Sign up" ? "Create Account" : "Login Now"}
+          {isSignup ? "Create Account" : "Login Now"}
         </button>
 
         <p className="text-sm text-gray-200">
-          {currState === "Sign up" ? (
+          {isSignup ? (
             <>
               Already have an account?{" "}
               <button
                 type="button"
                 className="cursor-pointer rounded font-medium text-violet-300 transition hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-violet-300"
-                onClick={() => {
-                  setCurrState("Login");
-                  setIsDataSubmitted(false);
-                }}
+                onClick={() => navigate("/login")}
               >
                 Login
               </button>
@@ -147,10 +146,7 @@ const LoginPage = () => {
               <button
                 type="button"
                 className="cursor-pointer rounded font-medium text-violet-300 transition hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-violet-300"
-                onClick={() => {
-                  setCurrState("Sign up");
-                  setIsDataSubmitted(false);
-                }}
+                onClick={() => navigate("/signup")}
               >
                 Sign up
               </button>

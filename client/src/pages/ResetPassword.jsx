@@ -1,7 +1,7 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import axios from "axios";
 import toast from "react-hot-toast";
-import { useNavigate } from "react-router-dom";
+import { Navigate, useNavigate } from "react-router-dom";
 
 const ResetPassword = () => {
   const navigate = useNavigate();
@@ -11,13 +11,6 @@ const ResetPassword = () => {
   const [newPassword, setNewPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [loading, setLoading] = useState(false);
-
-  useEffect(() => {
-    if (!email) {
-      toast.error("Please enter email first");
-      navigate("/forgot-password");
-    }
-  }, [email, navigate]);
 
   const handleResetPassword = async (e) => {
     e.preventDefault();
@@ -60,6 +53,10 @@ const ResetPassword = () => {
       setLoading(false);
     }
   };
+
+  if (!email) {
+    return <Navigate to="/forgot-password" replace />;
+  }
 
   return (
     <div className="flex min-h-dvh items-center justify-center bg-black px-4 py-6">

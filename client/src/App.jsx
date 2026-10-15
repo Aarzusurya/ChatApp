@@ -34,7 +34,12 @@ const App = () => {
         {/* Login */}
         <Route
           path="/login"
-          element={!authUser ? <LoginPage /> : <Navigate to="/" />}
+          element={!authUser ? <LoginPage key="login" /> : <Navigate to="/" />}
+        />
+
+        <Route
+          path="/signup"
+          element={!authUser ? <LoginPage key="signup" /> : <Navigate to="/" />}
         />
 
         {/* Profile */}
