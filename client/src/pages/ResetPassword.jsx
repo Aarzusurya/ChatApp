@@ -44,15 +44,12 @@ const ResetPassword = () => {
     try {
       setLoading(true);
 
-      await axios.post(
-        "http://localhost:5000/api/user/reset-password",
-        {
-          email,
-          otp: cleanOtp,
-          newPassword: cleanNewPassword,
-          confirmPassword: cleanConfirmPassword, // 🔥 VERY IMPORTANT
-        }
-      );
+      await axios.post("/api/user/reset-password", {
+        email,
+        otp: cleanOtp,
+        newPassword: cleanNewPassword,
+        confirmPassword: cleanConfirmPassword,
+      });
 
       toast.success("Password reset successful 🎉");
       localStorage.removeItem("resetEmail");

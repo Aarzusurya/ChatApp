@@ -19,13 +19,12 @@ const ForgotPassword = () => {
     try {
       setLoading(true);
 
-      const res = await axios.post(
-        "http://localhost:5000/api/user/forgot-password",
-        { email }
-      );
+      const res = await axios.post("/api/user/forgot-password", {
+        email: email.trim(),
+      });
 
       // ✅ EMAIL SAVE KARO (MOST IMPORTANT)
-      localStorage.setItem("resetEmail", email);
+      localStorage.setItem("resetEmail", email.trim());
 
       toast.success(res.data.message || "OTP sent successfully");
 

@@ -178,23 +178,26 @@ export const updateProfile = async (req, res) => {
 // ================= FORGOT PASSWORD =================
 export const forgotPassword = async (req, res) => {
   try {
-    const { email } = req.body;
+    const email = req.body.email?.trim();
 
     if (!email) {
-      return res.status(400).json({ message: "Email is required" });
+      return res.status(400).json({ success: false, message: "Email is required" });
+    }
+
+    if (!process.env.EMAIL_USER || !process.env.EMAIL_PASS) {
+      console.error("Forgot password email service is not configured");
+      return res.status(503).json({
+        success: false,
+        message: "Password reset email is temporarily unavailable",
+      });
     }
 
     const user = await User.findOne({ email });
     if (!user) {
-      return res.status(404).json({ message: "User not found" });
+      return res.status(404).json({ success: false, message: "User not found" });
     }
 
     const otp = Math.floor(100000 + Math.random() * 900000).toString();
-
-    user.resetOTP = otp;
-    user.resetOTPExpiry = Date.now() + 10 * 60 * 1000;
-    await user.save();
-
     const transporter = nodemailer.createTransport({
       service: "gmail",
       auth: {
@@ -211,11 +214,15 @@ export const forgotPassword = async (req, res) => {
              <p>This OTP is valid for 10 minutes.</p>`,
     });
 
+    user.resetOTP = otp;
+    user.resetOTPExpiry = Date.now() + 10 * 60 * 1000;
+    await user.save();
+
     res.json({ success: true, message: "OTP sent to email" });
 
   } catch (error) {
     console.error("Forgot password error:", error);
-    res.status(500).json({ message: "Failed to send OTP" });
+    res.status(500).json({ success: false, message: "Failed to send OTP" });
   }
 };
 
