@@ -183,11 +183,11 @@ export const forgotPassword = async (req, res) => {
       return res.status(400).json({ success: false, message: "Email is required" });
     }
 
-    if (!process.env.RESEND_API_KEY) {
+    if (!process.env.BREVO_API_KEY || !process.env.EMAIL_FROM) {
       console.error("Forgot password email service is not configured");
       return res.status(503).json({
         success: false,
-        message: "Password reset email is not configured. Set RESEND_API_KEY.",
+        message: "Password reset email is not configured. Set BREVO_API_KEY and EMAIL_FROM.",
       });
     }
 
@@ -197,53 +197,44 @@ export const forgotPassword = async (req, res) => {
     }
 
     const otp = Math.floor(100000 + Math.random() * 900000).toString();
-    const emailResponse = await fetch("https://api.resend.com/emails", {
+    const emailResponse = await fetch("https://api.brevo.com/v3/smtp/email", {
       method: "POST",
       headers: {
-        Authorization: `Bearer ${process.env.RESEND_API_KEY}`,
+        "api-key": process.env.BREVO_API_KEY,
+        Accept: "application/json",
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        from: process.env.EMAIL_FROM || "ChatApp <onboarding@resend.dev>",
-        to: [email],
+        sender: {
+          name: "ChatApp",
+          email: process.env.EMAIL_FROM,
+        },
+        to: [{ email }],
         subject: "Password Reset OTP",
-        html: `<h2>Your OTP: ${otp}</h2>
-               <p>This OTP is valid for 10 minutes.</p>`,
+        htmlContent: `<h2>Your OTP: ${otp}</h2>
+                      <p>This OTP is valid for 10 minutes.</p>`,
       }),
       signal: AbortSignal.timeout(15000),
     });
 
     if (!emailResponse.ok) {
       const errorBody = await emailResponse.json().catch(() => ({}));
-      const providerMessage = errorBody.message || "Unknown Resend error";
-      const normalizedMessage = providerMessage.toLowerCase();
+      const providerMessage = errorBody.message || "Unknown Brevo error";
       const safeProviderMessage = providerMessage
         .replace(/\b[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}\b/gi, "[email]")
-        .replace(/\bre_[A-Za-z0-9_-]+\b/g, "[redacted]");
-      console.error("Resend email API error:", {
+        .replace(/\bxkeysib-[A-Za-z0-9_-]+\b/g, "[redacted]");
+      console.error("Brevo email API error:", {
         status: emailResponse.status,
-        name: errorBody.name,
         message: safeProviderMessage,
       });
 
-      let message = `Resend rejected the email (${errorBody.name || emailResponse.status}): ${safeProviderMessage}`;
+      let message = `Brevo rejected the email (${emailResponse.status}): ${safeProviderMessage}`;
       if (emailResponse.status === 401) {
-        message = "Resend rejected the API key. Check RESEND_API_KEY in Render.";
-      } else if (
-        normalizedMessage.includes("testing emails") ||
-        normalizedMessage.includes("only send") ||
-        normalizedMessage.includes("own email") ||
-        normalizedMessage.includes("only the account owner")
-      ) {
-        message = "Resend's test sender can only send to your Resend account email. Verify a domain and set EMAIL_FROM to send to other users.";
-      } else if (
-        normalizedMessage.includes("domain") ||
-        normalizedMessage.includes("from address") ||
-        normalizedMessage.includes("sender")
-      ) {
-        message = "Resend rejected the sender. Verify its domain in Resend, then set EMAIL_FROM in Render to an address on that domain.";
+        message = "Brevo rejected the API key. Check BREVO_API_KEY in Render.";
       } else if (emailResponse.status === 429) {
-        message = "Resend rate limit reached. Wait a little and try again.";
+        message = "Brevo rate limit reached. Wait a little and try again.";
+      } else if (emailResponse.status === 400 || emailResponse.status === 403) {
+        message = `Brevo rejected the sender or recipient (${emailResponse.status}): ${safeProviderMessage}`;
       }
 
       return res.status(502).json({
