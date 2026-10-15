@@ -1,6 +1,7 @@
 import { useEffect, useState, useContext } from "react";
 import axios from "axios";
 import { AuthContext } from "../context/AuthContext";
+import assets from "../assets/assets";
 
 const UserSearch = ({ onSelectUser }) => {
   const { authUser, token } = useContext(AuthContext);
@@ -61,7 +62,7 @@ const UserSearch = ({ onSelectUser }) => {
       ) : users.length === 0 ? (
         <p className="text-gray-400 text-sm">No users found</p>
       ) : (
-        <ul>
+        <ul className="max-h-32 overflow-y-auto">
           {users.map((user) => (
             <li
               key={user._id}
@@ -69,7 +70,10 @@ const UserSearch = ({ onSelectUser }) => {
               className="cursor-pointer hover:bg-gray-100 p-2 rounded flex items-center gap-2 transition"
             >
               <img
-                src={user.profilePic || "/default-avatar.png"}
+                src={user.profilePic || assets.avatar_icon}
+                onError={(event) => {
+                  event.currentTarget.src = assets.avatar_icon;
+                }}
                 alt={user.fullName}
                 className="w-8 h-8 rounded-full object-cover"
               />

@@ -75,6 +75,9 @@ const ChatContainer = () => {
       <div className="flex shrink-0 items-center gap-3 border-b border-stone-500 px-3 py-3 sm:px-4">
         <img
           src={selectedUser.profilePic || assets.avatar_icon}
+          onError={(event) => {
+            event.currentTarget.src = assets.avatar_icon;
+          }}
           className="w-9 h-9 rounded-full"
         />
 
@@ -126,6 +129,9 @@ const ChatContainer = () => {
                       ? authUser?.profilePic || assets.avatar_icon
                       : selectedUser?.profilePic || assets.avatar_icon
                   }
+                  onError={(event) => {
+                    event.currentTarget.src = assets.avatar_icon;
+                  }}
                   className="w-7 h-7 rounded-full"
                 />
 

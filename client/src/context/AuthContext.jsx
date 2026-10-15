@@ -61,13 +61,13 @@ export const AuthProvider = ({ children }) => {
     try {
       const { data } = await axios.put("/api/user/update-profile", formData);
       if (!data.success) {
-        toast.error(data.message);
+        toast.error(data.message || "Profile update failed");
         return false;
       }
 
       setAuthUser(data.user);
       localStorage.setItem("authUser", JSON.stringify(data.user));
-      toast.success("Profile updated successfully");
+      toast.success(data.user.profilePic ? "Profile updated successfully" : "Profile details saved");
       return true;
     } catch (error) {
       toast.error(error.response?.data?.message || "Profile update failed");

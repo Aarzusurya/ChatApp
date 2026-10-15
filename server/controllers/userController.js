@@ -123,44 +123,55 @@ export const getAllUsers = async (req, res) => {
 // ================= UPDATE PROFILE =================
 export const updateProfile = async (req, res) => {
   try {
-    const updatedData = {
-      fullName: req.body.fullName,
-      bio: req.body.bio,
-    };
+    const updatedData = {};
+
+    if (typeof req.body.fullName === "string") {
+      const fullName = req.body.fullName.trim();
+      if (!fullName) {
+        return res.status(400).json({ success: false, message: "Name cannot be empty" });
+      }
+      updatedData.fullName = fullName;
+    }
+
+    if (typeof req.body.bio === "string") {
+      updatedData.bio = req.body.bio.trim();
+    }
 
     if (req.file) {
-      cloudinary.uploader.upload_stream(
-        { resource_type: "image" },
-        async (err, result) => {
-          if (err) {
-            return res.status(500).json({ success: false, message: "Image upload failed" });
+      const result = await new Promise((resolve, reject) => {
+        const stream = cloudinary.uploader.upload_stream(
+          { resource_type: "image" },
+          (error, uploadedImage) => {
+            if (error) {
+              reject(error);
+              return;
+            }
+            resolve(uploadedImage);
           }
+        );
+        stream.end(req.file.buffer);
+      });
+      updatedData.profilePic = result.secure_url;
+    }
 
-          updatedData.profilePic = result.secure_url;
-
-          const user = await User.findByIdAndUpdate(
-            req.user._id,
-            updatedData,
-            { new: true }
-          );
-
-          res.json({ success: true, user });
-        }
-      ).end(req.file.buffer);
-      return;
+    if (Object.keys(updatedData).length === 0) {
+      return res.status(400).json({ success: false, message: "No profile changes provided" });
     }
 
     const user = await User.findByIdAndUpdate(
       req.user._id,
       updatedData,
       { new: true }
-    );
+    ).select("-password");
 
     res.json({ success: true, user });
 
   } catch (error) {
     console.error("Update profile error:", error);
-    res.status(500).json({ success: false, message: "Profile update failed" });
+    res.status(500).json({
+      success: false,
+      message: req.file ? "Profile picture upload failed" : "Profile update failed",
+    });
   }
 };
 

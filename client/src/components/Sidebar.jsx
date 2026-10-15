@@ -148,6 +148,9 @@ const Sidebar = () => {
                 <div className="relative">
                   <img
                     src={user.profilePic || assets.avatar_icon}
+                    onError={(event) => {
+                      event.currentTarget.src = assets.avatar_icon;
+                    }}
                     className="w-9 h-9 rounded-full object-cover"
                     alt={user.fullName}
                   />

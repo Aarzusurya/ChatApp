@@ -18,6 +18,9 @@ const RightSidebar = ({ selectedUser }) => {
       <div className="pt-16 flex flex-col items-center gap-2 text-xs font-light">
         <img
           src={selectedUser.profilePic || assets.avatar_icon}
+          onError={(event) => {
+            event.currentTarget.src = assets.avatar_icon;
+          }}
           className="w-20 h-20 rounded-full object-cover"
         />
 
