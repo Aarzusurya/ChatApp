@@ -200,6 +200,9 @@ export const forgotPassword = async (req, res) => {
     const otp = Math.floor(100000 + Math.random() * 900000).toString();
     const transporter = nodemailer.createTransport({
       service: "gmail",
+      connectionTimeout: 10000,
+      greetingTimeout: 10000,
+      socketTimeout: 20000,
       auth: {
         user: process.env.EMAIL_USER,
         pass: process.env.EMAIL_PASS,
@@ -222,7 +225,13 @@ export const forgotPassword = async (req, res) => {
 
   } catch (error) {
     console.error("Forgot password error:", error);
-    res.status(500).json({ success: false, message: "Failed to send OTP" });
+    const timedOut = error.code === "ETIMEDOUT" || error.code === "ESOCKET";
+    res.status(timedOut ? 504 : 500).json({
+      success: false,
+      message: timedOut
+        ? "Email delivery timed out. Check that your hosting provider allows Gmail SMTP."
+        : "Failed to send OTP",
+    });
   }
 };
 

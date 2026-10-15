@@ -21,6 +21,8 @@ const ForgotPassword = () => {
 
       const res = await axios.post("/api/user/forgot-password", {
         email: email.trim(),
+      }, {
+        timeout: 25000,
       });
 
       // ✅ EMAIL SAVE KARO (MOST IMPORTANT)
@@ -31,7 +33,10 @@ const ForgotPassword = () => {
       // ✅ RESET PAGE OPEN KARO
       navigate("/reset-password");
     } catch (err) {
-      toast.error(err.response?.data?.message || "Failed to send OTP");
+      const message = err.code === "ECONNABORTED"
+        ? "The request timed out. Check the backend deployment and email service, then try again."
+        : err.response?.data?.message || "Failed to send OTP";
+      toast.error(message);
     } finally {
       setLoading(false);
     }
@@ -73,6 +78,11 @@ const ForgotPassword = () => {
           >
             {loading ? "Sending OTP..." : "Send OTP"}
           </button>
+          {loading && (
+            <p role="status" className="text-center text-sm text-gray-300">
+              Contacting the email service. This can take up to 25 seconds.
+            </p>
+          )}
         </form>
       </div>
     </div>
