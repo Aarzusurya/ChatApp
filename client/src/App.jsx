@@ -14,7 +14,7 @@ const App = () => {
 
   return (
     <div
-      className="min-h-screen relative"
+      className="relative min-h-dvh"
       style={{
         backgroundImage: `url(${bgImage})`,
         backgroundRepeat: "no-repeat",

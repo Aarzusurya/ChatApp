@@ -73,6 +73,28 @@ const ChatContainer = () => {
     <div className="relative flex h-full min-h-0 min-w-0 flex-col overflow-hidden backdrop-blur-lg">
       {/* HEADER */}
       <div className="flex shrink-0 items-center gap-3 border-b border-stone-500 px-3 py-3 sm:px-4">
+        <button
+          type="button"
+          onClick={() => setSelectedUser(null)}
+          className="flex size-8 shrink-0 items-center justify-center md:hidden"
+          aria-label="Back to chats"
+        >
+          <svg
+            aria-hidden="true"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2"
+            className="size-6 text-white"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              d="M15 18l-6-6 6-6M9 12h12"
+            />
+          </svg>
+        </button>
+
         <img
           src={selectedUser.profilePic || assets.avatar_icon}
           onError={(event) => {
@@ -89,12 +111,6 @@ const ChatContainer = () => {
             )}
           </p>
         </div>
-
-        <img
-          onClick={() => setSelectedUser(null)}
-          src={assets.menu_icon}
-          className="md:hidden w-6 cursor-pointer"
-        />
       </div>
 
       {/* CHAT AREA */}
