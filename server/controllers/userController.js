@@ -214,11 +214,37 @@ export const forgotPassword = async (req, res) => {
     });
 
     if (!emailResponse.ok) {
-      const errorDetails = await emailResponse.text();
-      console.error("Resend email API error:", emailResponse.status, errorDetails);
+      const errorBody = await emailResponse.json().catch(() => ({}));
+      const providerMessage = errorBody.message || "Unknown Resend error";
+      const normalizedMessage = providerMessage.toLowerCase();
+      console.error("Resend email API error:", {
+        status: emailResponse.status,
+        name: errorBody.name,
+        message: providerMessage,
+      });
+
+      let message = "Resend rejected the email. Check the backend logs for details.";
+      if (emailResponse.status === 401) {
+        message = "Resend rejected the API key. Check RESEND_API_KEY in Render.";
+      } else if (
+        normalizedMessage.includes("testing emails") ||
+        normalizedMessage.includes("only send") ||
+        normalizedMessage.includes("own email")
+      ) {
+        message = "Resend's test sender can only send to your Resend account email. Verify a domain and set EMAIL_FROM to send to other users.";
+      } else if (
+        normalizedMessage.includes("domain") ||
+        normalizedMessage.includes("from address") ||
+        normalizedMessage.includes("sender")
+      ) {
+        message = "Resend rejected the sender. Verify its domain in Resend, then set EMAIL_FROM in Render to an address on that domain.";
+      } else if (emailResponse.status === 429) {
+        message = "Resend rate limit reached. Wait a little and try again.";
+      }
+
       return res.status(502).json({
         success: false,
-        message: "Email delivery failed. Check the Resend API key and sender permissions.",
+        message,
       });
     }
 
