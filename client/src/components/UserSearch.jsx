@@ -67,7 +67,7 @@ const UserSearch = ({ onSelectUser }) => {
             <li
               key={user._id}
               onClick={() => onSelectUser(user)}
-              className="cursor-pointer hover:bg-gray-100 p-2 rounded flex items-center gap-2 transition"
+              className="flex cursor-pointer items-center gap-2 rounded p-2 text-white transition-colors hover:bg-violet-500/30 hover:text-white focus-within:bg-violet-500/30"
             >
               <img
                 src={user.profilePic || assets.avatar_icon}

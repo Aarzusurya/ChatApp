@@ -1,10 +1,10 @@
 import { useState, useContext, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import assets from "../assets/assets";
 import { AuthContext } from "../context/AuthContext";
 
 const LoginPage = () => {
-  const [currState, setCurrState] = useState("Sign up");
+  const [currState, setCurrState] = useState("Login");
   const [fullName, setFullName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -51,15 +51,17 @@ const LoginPage = () => {
       >
         <h2 className="text-2xl flex justify-between items-center">
           {currState}
-          {isDataSubmitted && (
-            <img
-              src={assets.arrow_icon}
-              alt="Back"
-              className="w-5 cursor-pointer"
-              onClick={() => setIsDataSubmitted(false)}
-            />
-          )}
         </h2>
+
+        {isDataSubmitted && (
+          <button
+            type="button"
+            onClick={() => setIsDataSubmitted(false)}
+            className="self-start rounded-md border border-white/30 px-3 py-2 text-sm text-white transition hover:bg-white/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-violet-400"
+          >
+            ← Back to details
+          </button>
+        )}
 
         {currState === "Sign up" && (
           <button
@@ -120,44 +122,51 @@ const LoginPage = () => {
 
         <button
           type="submit"
-          className="py-3 bg-gradient-to-r from-purple-400 to-violet-600 rounded-md"
+          className="rounded-md bg-gradient-to-r from-purple-400 to-violet-600 py-3 text-white transition hover:brightness-110 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white"
         >
           {currState === "Sign up" ? "Create Account" : "Login Now"}
         </button>
 
-        <p className="text-sm text-gray-300">
+        <p className="text-base font-medium text-white">
           {currState === "Sign up" ? (
             <>
               Already have an account?{" "}
-              <span
-                className="text-violet-400 cursor-pointer"
+              <button
+                type="button"
+                className="font-bold text-white underline decoration-violet-300 decoration-2 underline-offset-4 transition hover:text-violet-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-violet-300"
                 onClick={() => {
                   setCurrState("Login");
                   setIsDataSubmitted(false);
                 }}
               >
                 Login
-              </span>
+              </button>
             </>
           ) : (
             <>
               Create an account{" "}
-              <span
-                className="text-violet-400 cursor-pointer"
-                onClick={() => setCurrState("Sign up")}
+              <button
+                type="button"
+                className="font-bold text-white underline decoration-violet-300 decoration-2 underline-offset-4 transition hover:text-violet-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-violet-300"
+                onClick={() => {
+                  setCurrState("Sign up");
+                  setIsDataSubmitted(false);
+                }}
               >
                 Sign up
-              </span>
+              </button>
             </>
           )}
         </p>
 
-<p
-  className="text-sm text-blue-500 cursor-pointer"
-  onClick={() => navigate("/forgot-password")}
->
-  Forgot Password?
-</p>
+        {currState === "Login" && (
+          <Link
+            to="/forgot-password"
+            className="w-fit rounded-md border border-violet-200/70 bg-violet-950/80 px-3 py-2 text-base font-bold text-white underline decoration-violet-200 decoration-2 underline-offset-4 shadow-sm shadow-black/30 transition hover:bg-violet-900 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white"
+          >
+            Forgot Password?
+          </Link>
+        )}
 
       </form>
     </div>
