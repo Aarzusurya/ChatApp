@@ -2,7 +2,6 @@ import bcrypt from "bcryptjs";
 import User from "../models/User.js";
 import cloudinary from "../lib/cloudinary.js";
 import jwt from "jsonwebtoken";
-import nodemailer from "nodemailer";
 import Conversation from "../models/conversation.js";
 
 // ================= TOKEN =================
@@ -184,11 +183,11 @@ export const forgotPassword = async (req, res) => {
       return res.status(400).json({ success: false, message: "Email is required" });
     }
 
-    if (!process.env.EMAIL_USER || !process.env.EMAIL_PASS) {
+    if (!process.env.RESEND_API_KEY) {
       console.error("Forgot password email service is not configured");
       return res.status(503).json({
         success: false,
-        message: "Password reset email is temporarily unavailable",
+        message: "Password reset email is not configured. Set RESEND_API_KEY.",
       });
     }
 
@@ -198,24 +197,30 @@ export const forgotPassword = async (req, res) => {
     }
 
     const otp = Math.floor(100000 + Math.random() * 900000).toString();
-    const transporter = nodemailer.createTransport({
-      service: "gmail",
-      connectionTimeout: 10000,
-      greetingTimeout: 10000,
-      socketTimeout: 20000,
-      auth: {
-        user: process.env.EMAIL_USER,
-        pass: process.env.EMAIL_PASS,
+    const emailResponse = await fetch("https://api.resend.com/emails", {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${process.env.RESEND_API_KEY}`,
+        "Content-Type": "application/json",
       },
+      body: JSON.stringify({
+        from: process.env.EMAIL_FROM || "ChatApp <onboarding@resend.dev>",
+        to: [email],
+        subject: "Password Reset OTP",
+        html: `<h2>Your OTP: ${otp}</h2>
+               <p>This OTP is valid for 10 minutes.</p>`,
+      }),
+      signal: AbortSignal.timeout(15000),
     });
 
-    await transporter.sendMail({
-      from: `"ChatApp Support" <${process.env.EMAIL_USER}>`,
-      to: email,
-      subject: "Password Reset OTP",
-      html: `<h2>Your OTP: ${otp}</h2>
-             <p>This OTP is valid for 10 minutes.</p>`,
-    });
+    if (!emailResponse.ok) {
+      const errorDetails = await emailResponse.text();
+      console.error("Resend email API error:", emailResponse.status, errorDetails);
+      return res.status(502).json({
+        success: false,
+        message: "Email delivery failed. Check the Resend API key and sender permissions.",
+      });
+    }
 
     user.resetOTP = otp;
     user.resetOTPExpiry = Date.now() + 10 * 60 * 1000;
@@ -225,11 +230,11 @@ export const forgotPassword = async (req, res) => {
 
   } catch (error) {
     console.error("Forgot password error:", error);
-    const timedOut = error.code === "ETIMEDOUT" || error.code === "ESOCKET";
+    const timedOut = error.name === "TimeoutError" || error.name === "AbortError";
     res.status(timedOut ? 504 : 500).json({
       success: false,
       message: timedOut
-        ? "Email delivery timed out. Check that your hosting provider allows Gmail SMTP."
+        ? "Email delivery timed out. Try again shortly."
         : "Failed to send OTP",
     });
   }
