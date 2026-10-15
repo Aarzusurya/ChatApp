@@ -126,13 +126,13 @@ const LoginPage = () => {
           {currState === "Sign up" ? "Create Account" : "Login Now"}
         </button>
 
-        <p className="text-base font-medium text-white">
+        <p className="text-sm text-gray-200">
           {currState === "Sign up" ? (
             <>
               Already have an account?{" "}
               <button
                 type="button"
-                className="cursor-pointer rounded font-bold text-white underline decoration-violet-300 decoration-2 underline-offset-4 transition hover:text-violet-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-violet-300"
+                className="cursor-pointer rounded font-medium text-violet-300 transition hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-violet-300"
                 onClick={() => {
                   setCurrState("Login");
                   setIsDataSubmitted(false);
@@ -146,7 +146,7 @@ const LoginPage = () => {
               Create an account{" "}
               <button
                 type="button"
-                className="cursor-pointer rounded font-bold text-white underline decoration-violet-300 decoration-2 underline-offset-4 transition hover:text-violet-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-violet-300"
+                className="cursor-pointer rounded font-medium text-violet-300 transition hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-violet-300"
                 onClick={() => {
                   setCurrState("Sign up");
                   setIsDataSubmitted(false);
@@ -161,7 +161,7 @@ const LoginPage = () => {
         {currState === "Login" && (
           <Link
             to="/forgot-password"
-            className="w-fit cursor-pointer rounded-md border border-violet-200/70 bg-violet-950/80 px-3 py-2 text-base font-bold text-white underline decoration-violet-200 decoration-2 underline-offset-4 shadow-sm shadow-black/30 transition hover:bg-violet-900 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white"
+            className="w-fit cursor-pointer rounded text-sm font-medium text-violet-300 underline decoration-violet-300/60 underline-offset-4 transition hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-violet-400"
           >
             Forgot Password?
           </Link>
